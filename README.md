@@ -5,6 +5,7 @@ Lcd CMS is small project build on **Phalcon framework 3.2**. It's apply to **8-B
 Developer can use to develop powerful applications with low server consumption and high performance via Phalcon's architecture allows the framework to always be memory resident, offering its functionality whenever its needed, without expensive file stats and file reads that traditional PHP frameworks employ.<br/>
 * Author: lechidungvl@gmail.com<br/>
 * Blog: http://lcdung.top
+<<<<<<< HEAD
 * Document: updating
 
 ### Basic features
@@ -16,6 +17,8 @@ Developer can use to develop powerful applications with low server consumption a
 * Use library private
 * Use helper for view or controller of module
 * Use memcached, APC cached
+=======
+>>>>>>> Add new version Lcd CMS 🎌
 
 ### Install required
 * Phalcon 3.2+
@@ -78,4 +81,8 @@ phalcon migration generate --config=app/config/system/system_migration.php --mig
 
 # Run migration data
 phalcon migration run --config=app/config/system/system_migration.php --migrations=app/migrations --data=always
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> Add new version Lcd CMS 🎌
