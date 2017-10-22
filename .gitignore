@@ -1,9 +1,3 @@
-/app/cache/compiled/backend/*
-/app/cache/compiled/frontend/*
-/app/cache/data/*
-/app/cache/logs/*
-/public/upload/editor/*
-/public/upload/thumbs/*
 /node_modules/*
 /vendor/*
 /.c9/
