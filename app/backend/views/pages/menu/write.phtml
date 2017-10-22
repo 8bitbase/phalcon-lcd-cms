@@ -1,0 +1,140 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('menu/index') }}">{{ trans('menu-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('menu/index') }}">{{ trans('menu-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {% if menu is not empty %}
+                    {{ trans('label.edit') }}
+                {% else %}
+                    {{ trans('label.add') }}
+                {% endif %}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <form action="{{url('menu/save')}}" method="post" class="form-horizontal" id="menu-form">
+            <div class="form-group has-feedback">
+                <label for="menu-name" class="col-sm-2 control-label">{{ trans('label.name') }}</label>
+                <div class="col-sm-5">
+                    <input type="text" name="name" {% if menu is not empty %}value="{{menu['name']}}"{% endif %}
+                           class="form-control" id="menu-name" placeholder="{{ trans('label.name') }}">
+                </div>
+            </div>
+            <div class="radio form-group">
+                <div class="col-sm-1 col-sm-offset-2">
+    				<label>
+    					<input id="input_link" name="check-link" type="radio" class="ace" {% if menu['url'] is not empty %}checked{% endif %} />
+    					<span class="lbl">{{ trans('label.link') }}</span>
+    				</label>
+				</div>
+				<div class="col-sm-1">
+    				<label>
+    					<input id="input_category" name="check-link" type="radio" class="ace" {% if menu['id_category'] is not empty %}checked{% endif %} />
+    					<span class="lbl">{{ trans('label.category') }}</span>
+    				</label>
+				</div>
+			</div>
+            <div class="form-group" id="display_link" {% if menu['id_category'] is not empty %}style="display:none"{% endif %}>
+                <label for="menu-url" class="col-sm-2 control-label">{{ trans('label.link') }}</label>
+                <div class="col-sm-5">
+                    <input type="text" name="url" {% if menu is not empty %}value="{{menu['url']}}"{% endif %} class="form-control" id="menu-url" placeholder="/index/index">
+                </div>
+            </div>
+            <fieldset id="display_category" {% if menu['url'] is not empty %}style="display:none"{% endif %}>
+                <div class="form-group">
+                    <label for="category-parent" class="col-sm-2 control-label">{{ trans('label.category') }}</label>
+                    <div class="col-sm-5">
+                        <select class="form-control" name="id_category">
+                            <option value="0">{{ trans('label.please-select') }}</option>
+                            {% for value in categoryList %}
+                                {% if menu is not empty and menu['id_category'] == value['id'] %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% elseif value['id'] == parentid %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% else %}
+                                    <option value="{{value['id']}}">
+                                {% endif %}
+                                {% if value['parent'] > 0 %}
+                                    {{ str_repeat('-', substr_count(value['path'], '/')) }}
+                                    {{value['name']}}
+                                {% else %}
+                                    {{value['name']}}
+                                {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="form-group">
+                    <label for="menu-parent" class="col-sm-2 control-label">{{ trans('label.parent') }}</label>
+                    <div class="col-sm-5">
+                        <select class="form-control" name="parent">
+                            <option value="0">{{ trans('label.please-select') }}</option>
+                            {% for value in menuList %}
+                                {% if menu is not empty and menu['parent'] == value['id'] %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% elseif value['id'] == parentid %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% else %}
+                                    <option value="{{value['id']}}">
+                                {% endif %}
+                                {% if value['parent'] > 0 %}
+                                    {{ str_repeat('-', substr_count(value['path'], '/')) }}
+                                    {{value['name']}}
+                                {% else %}
+                                    {{value['name']}}
+                                {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <label for="menu-sort" class="col-sm-2 control-label">{{ trans('label.sort') }}</label>
+                <div class="col-sm-5">
+                    <input type="text" name="sort" {% if menu is not empty %}value="{{menu['sort']}}"{% endif %}
+                           class="form-control" id="menu-sort" placeholder="999" />
+                    <span class="form-tips">{{ trans('label.suggest-sort') }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-5">
+                    {% if menu['id'] is not empty %}
+                        <input type="hidden" name="id" value="{{menu['id']}}" />
+                        <button type="submit" id="menu-btn" class="btn btn-info btn-sm">{{ trans('label.save') }}</button>
+                    {% else %}
+                        <button type="submit" id="menu-btn" class="btn btn-info btn-sm">{{ trans('label.add') }}</button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#input_category').on('click', function(){
+       $('#display_category').show();
+       $('#display_link').hide();
+       $("[name='url']").val('');
+    });
+    
+    $('#input_link').on('click', function(){
+       $('#display_link').show();
+       $('#display_category').hide();
+       $("[name='id_category']").val(0);
+    });
+</script>

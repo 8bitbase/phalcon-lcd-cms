@@ -1,0 +1,96 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('label.view') }}
+            </small>
+        </h1>
+    </div>
+    <div class="alert alert-block alert-success">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok green"></i>
+        {{ trans('welcome') }}
+        <strong class="green">
+            {{ title }}
+            <small>(v{{appVersion}})</small>
+        </strong>
+        {{ trans('phalconfw-description') }}
+    </div>
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5>
+                    <i class="icon-home"></i>
+                    {{ trans('system-message') }}
+                </h5>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-bordered table-hover">
+                        <tbody>
+                            <tr>
+                                <td>{{ trans('author') }}</td>
+                                <td> <a href="http://lcdung.top" target="_blank">L team one</a></td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('phalcon_version') }}</td>
+                                <td> <a href="https://phalconphp.com" target="_blank">3.1.0</a></td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('project') }}</td>
+                                <td>
+                                    <a href="https://gitlab.com/dunglc/phalcon-realtor" target="_blank">https://gitlab.com/dunglc/phalcon-realtor</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('domain') }}/{{ trans('ip') }}</td>
+                                <td>{{systemInfo['serverName']}}({{systemInfo['serverIp']}})</td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('server_operation') }}</td>
+                                <td>{{systemInfo['osName']}}/{{systemInfo['osVersion']}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('http_server') }}</td>
+                                <td>{{systemInfo['serverSoftware']}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('server_lang') }}</td>
+                                <td>{{systemInfo['serverLanguage']}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('server_port') }}</td>
+                                <td>{{systemInfo['serverPort']}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{title}}</td>
+                                <td>{{appVersion}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('PHP') }}</td>
+                                <td>{{systemInfo['phpVersion']}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ trans('php_run_mode') }}</td>
+                                <td>{{systemInfo['phpSapi']}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

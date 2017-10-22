@@ -1,0 +1,120 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('categories/index') }}">{{ trans('category-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('categories/index') }}">{{ trans('category-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {% if category is not empty %}
+                    {{ trans('label.edit') }}
+                {% else %}
+                    {{ trans('label.add') }}
+                {% endif %}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <form action="{{url('categories/save')}}" method="post" class="form-horizontal" id="category-form">
+            <div class="form-group has-feedback">
+                <label for="name" class="col-sm-2 control-label">{{ trans('label.name') }}</label>
+                <div class="col-sm-5">
+                    <input type="text" name="name" {% if category is not empty %}value="{{category['name']}}"{% endif %}
+                           class="form-control" id="name" placeholder="{{ trans('label.name') }}" />
+                    <span class="form-tips">{{ trans('validate.alpha_numeric_dash') }}</span>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="category-slug" class="col-sm-2 control-label">{{ trans('label.slug') }}</label>
+                <div class="col-sm-5">
+                    <input type="text" name="slug" {% if category is not empty %}value="{{category['slug']}}"{% endif %}
+                           class="form-control" id="category-slug" placeholder="{{ trans('label.slug') }}">
+                    <span class="form-tips">{{ trans('validate.alpha_numeric_dash') }}</span>
+                </div>
+            </div>
+            <fieldset>
+                <div class="form-group">
+                    <label for="category-parent" class="col-sm-2 control-label">{{ trans('label.parent') }}</label>
+                    <div class="col-sm-5">
+                        <select class="form-control" name="parent">
+                            <option>{{ trans('label.please-select') }}</option>
+                            {% for value in categoryList %}
+                                {% if category is not empty and category['parent'] == value['id'] %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% elseif value['id'] == parent %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% else %}
+                                    <option value="{{value['id']}}">
+                                {% endif %}
+                                {% if value['parent'] > 0 %}
+                                    {{ str_repeat('-', substr_count(value['path'], '/')) }}
+                                    {{value['name']}}
+                                {% else %}
+                                    {{value['name']}}
+                                {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <label for="category-sort" class="col-sm-2 control-label">{{ trans('label.sort') }}</label>
+                <div class="col-sm-5">
+                    <input type="text" name="sort" {% if category is not empty %}value="{{category['sort']}}"{% endif %}
+                           class="form-control" id="category-sort" placeholder="999" />
+                    <span class="form-tips">{{ trans('label.suggest-sort') }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="category-description" class="col-sm-2 control-label">{{ trans('label.desc') }}</label>
+                <div class="col-sm-5">
+                    <textarea name="description" class="form-control" rows="5">{% if category is not empty %}{{category['description']}}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.status') }}</label>
+                <div class="controls col-xs-12 col-sm-9">
+                    <div class="row">
+                        <div class="col-xs-3">
+                                <input name="status" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if category is not empty and category['status'] == 1 %}checked="checked"{% endif %} />
+                                <span class="lbl"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-5">
+                    {% if category['id'] is not empty %}
+                        <input type="hidden" name="id" value="{{category['id']}}" />
+                        <button type="submit" id="category-btn" class="btn btn-info btn-sm">{{ trans('label.save') }}</button>
+                    {% else %}
+                        <button type="submit" id="category-btn" class="btn btn-info btn-sm">{{ trans('label.add') }}</button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#category-btn').on('click', function(){
+        var categorySlug = $.trim($('#category-slug').val());
+        var categorySlugPattern = /^[\w-]+$/i;
+        if(categorySlug == true && !categorySlugPattern.test(categorySlug)){
+            tips_message("{{ trans('validate.alpha_numeric_dash') }}");
+            return false;
+        }
+
+        $('#category-form').submit();
+    });
+</script>

@@ -1,0 +1,69 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('label.view') }}
+            </small>
+        </h1>
+    </div>
+    <div class="col-sm-12 infobox-container">
+        <div class="infobox infobox-green  ">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-book"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number">{{articlesCount}}</span>
+                <div class="infobox-content">
+                    <a href="{{ url('articles/index') }}">
+                        {{ trans('total-article') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="infobox infobox-blue">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-archive"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number">{{categorysCount}}</span>
+                <div class="infobox-content">
+                    <a href="{{ url('categories/index') }}">
+                        {{ trans('total-category') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="infobox infobox-pink">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-pencil"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number">{{tagsCount}}</span>
+                <div class="infobox-content">
+                    <a href="{{ url('tags/index') }}">
+                        {{ trans('total-tag') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="infobox infobox-red">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-group"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number">{{ usersCount }}</span>
+                <div class="infobox-content">{{ trans('total-user') }}</div>
+            </div>
+        </div>
+    </div>
+</div>

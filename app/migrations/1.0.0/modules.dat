@@ -1,0 +1,19 @@
+1,Dashboard,DashboardController,1,1
+2,"Quản lý form",FormsController,1,1
+3,"Quản lý nhận thông tin",FormsSubmitController,1,1
+4,Index,IndexController,0,1
+5,"Quản lý phân quyền",AccessController,1,1
+6,"Quản lý tài khoản",AccountController,1,1
+7,Base,BaseController,0,1
+8,"Quản lý modules",ModulesController,1,1
+9,"Cấu hình hệ thống",OptionsController,1,1
+10,Passport,PassportController,1,1
+11,"Quản lý hồ sơ",ProfileController,1,1
+12,"Quản lý người dùng",UsersController,1,1
+13,"Quản lý bài viết",ArticlesController,1,1
+14,"Quản lý loại",CategoriesController,1,1
+15,"Quản lý Menu",MenuController,1,1
+16,"Quản lý thẻ",TagsController,1,1
+17,"Quản lý Banners",BannersController,1,1
+18,"Quản lý trang sale",SalePagesController,1,1
+19,"Quản lý Widget",WidgetPageController,1,1

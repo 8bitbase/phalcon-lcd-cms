@@ -1,0 +1,152 @@
+<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+        <a class="btn btn-success" href="{{ url('dashboard/index') }}" title="{{ trans('dashboard') }}">
+            <i class="ace-icon fa fa-signal"></i>
+        </a>
+        <a class="btn btn-info" href="{{ url('articles/write') }}" title="{{ trans('article-management') }}">
+            <i class="ace-icon fa fa-pencil"></i>
+        </a>
+        <a class="btn btn-warning" href="{{ url('users/index') }}" title="{{ trans('users') }}">
+            <i class="ace-icon fa fa-users"></i>
+        </a>
+        <a class="btn btn-danger" href="{{ url('options/base') }}"title="{{ trans('site-setting') }}">
+            <i class="ace-icon fa fa-cogs"></i>
+        </a>
+    </div>
+    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+        <span class="btn btn-success"></span>
+        <span class="btn btn-info"></span>
+        <span class="btn btn-warning"></span>
+        <span class="btn btn-danger"></span>
+    </div>
+</div>
+<ul class="nav nav-list" id="sidebar-box">
+    {% if CheckAccess('DashboardController', 'view', userinfo) == true %}
+    <li>
+        <a href="{{ url('dashboard/index') }}">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text">{{ trans('dashboard') }}</span>
+        </a>
+    </li>
+    {% endif %}
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">{{ trans('content-management') }}</span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            {% if CheckAccess('CategoriesController', 'view', userinfo) == true %}
+            <li>
+                <a href="{{ url('categories/index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('category-management') }}
+                </a>
+            </li>
+            {% endif %}
+            {% if CheckAccess('ArticlesController', 'view', userinfo) == true %}
+            <li>
+                <a href="{{ url('articles/index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('article-management') }}
+                </a>
+            </li>
+            {% endif %}
+            {% if CheckAccess('TagsController', 'view', userinfo) == true %}
+            <li>
+                <a href="{{ url('tags/index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('tag-management') }}
+                </a>
+            </li>
+            {% endif %}
+            {% if CheckAccess('MenuController', 'view', userinfo) == true %}
+            <li>
+                <a href="{{ url('menu/index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('menu-management') }}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-users"></i>
+            <span class="menu-text">{{ trans('users') }}</span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            {% if CheckAccess('ProfileController', 'view', userinfo) == true %}
+            <li>
+                <a href="{{ url('profile/index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('profile-management') }}
+                </a>
+            </li>
+            {% endif %}
+            {% if CheckAccess('UsersController', 'view', userinfo) == true %}
+            <li>
+                <a href="{{ url('users/index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('users-management') }}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </li>
+    {% if CheckAccess('OptionController', 'view', userinfo) == true %}
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-cogs"></i>
+            <span class="menu-text">{{ trans('site-config') }}</span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{{ url('options/base') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('site-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('options/mail') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('mail-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('options/api') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('api-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('options/read') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('view-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('modules/index') }}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {{ trans('modules') }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    {% endif %}
+</ul>
+<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+</div>
+<script type="text/javascript">
+    $('#sidebar-box a').each(function(){
+        var href = $.trim($(this).attr('href'));
+        if(href == window.location.pathname){
+            $(this).parent("li").parent("ul").parent("li").addClass("active").addClass("open");
+            $(this).parent("li").addClass("active");
+            return false;
+        }
+    });
+</script>

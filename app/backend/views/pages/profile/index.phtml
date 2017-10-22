@@ -1,0 +1,116 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('profile/index') }}">{{ trans('profile-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('profile/index') }}">{{ trans('profile-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('list') }}
+            </small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" placeholder="{{ trans('label.keyword') }}" {% if keyword is not empty %}value="{{keyword}}"{% endif %} />
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    {{ trans('label.search') }}
+                                    <i class="icon-search icon-on-right bigger-110"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="btn-panel">
+                            <a href="{{ url('profile/write') }}" class="btn btn-success btn-sm" role="button">{{ trans('label.add') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table tree-grid table-striped table-bordered table-condensed table-hover" id="test-table">
+                    <thead>
+                        <tr>
+                            <th>{{ trans('label.id') }}</th>
+                            <th>{{ trans('label.name') }}</th>
+                            <th>{{ trans('label.status') }}</th>
+                            <th>{{ trans('label.created') }}</th>
+                            <th>{{ trans('label.updated') }}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    {% if profile is not empty %}
+                        <tbody>
+                            {% for profile in profile %}
+                                <tr>
+                                    <td>
+                                        {{profile['id']}}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url('profile/write?profileID='~profile['id']) }}" title="{{ trans('label.edit') }}">
+                                            {{profile['name']}}
+                                        </a>
+                                        
+                                    </td>
+                                    <td>
+                                        {% if profile['status'] == 0 %}
+                                            <span class="label label-white middle">
+                                                <s>{{ trans('label.inactive') }}</s>
+                                            </span>
+                                        {% else %}
+                                            <span class="label label-success label-white middle">
+                                                {{ trans('label.active') }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{profile['create_time']}}</td>
+                                    <td>{{profile['modify_time']}}</td>
+                                    <td>
+                                        <a class="btn btn-xs btn-info" href="{{ url('profile/write?profileID='~profile['id']) }}" title="{{ trans('label.edit') }}">
+                                            <i class="fa fa-pencil bigger-120"></i>
+                                        </a>
+                                        <button class="btn btn-xs btn-danger delete-profile" data-url="{{ url('profile/delete?profileID='~profile['id']) }}" title="{{ trans('label.delete') }}">
+                                            <i class="fa fa-trash-o bigger-120"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                        <tr>
+                            <td colspan="5">{{ trans('label.no-data') }}</td>
+                        </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+                {% if profile is not empty %}
+                    {{ partial('public/paginator') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.delete-profile').on('click', function(){
+        var dataUrl = $.trim($(this).attr('data-url'));
+        if(!window.confirm("{{ trans('alert.is-delete-selected') }}")){
+            return false;
+        }
+        window.location.href = dataUrl;
+    });
+</script>

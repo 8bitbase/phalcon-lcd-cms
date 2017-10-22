@@ -1,0 +1,75 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('access/index') }}">{{ trans('access-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('access/index') }}">{{ trans('access-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {% if access is not empty %}
+                    {{ trans('label.edit') }}
+                {% else %}
+                    {{ trans('label.add') }}
+                {% endif %}
+            </small>
+        </h1>
+    </div>
+    <form action="{{url('access/publish')}}" method="post" class="form-horizontal" id="save-archive-form">
+        <div class="col-lg-8">
+            <div class="form-group">
+                <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.name') }}</label>
+                <div class="col-sm-9">
+                    <input type="text" name="name" class="form-control" id="name" {% if access is not empty %}value="{{access['name']}}"{% endif %}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.version') }}</label>
+                <div class="col-sm-9">
+                    <input type="text" name="version" class="form-control" id="version" {% if access is not empty %}value="{{access['version']}}"{% endif %}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.active') }}</label>
+                <div class="controls col-xs-12 col-sm-9">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <label>
+                                <input name="active" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if access.active is not empty and access.active == 1 %}checked="checked"{% endif %} />
+                                <span class="lbl"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-5">
+                    {% if access is not empty %}
+                        <input type="hidden" name="accessID" value="{{access['id']}}" />
+                    {% endif %}
+                    <button type="button" class="btn btn-info btn-sm" data-status="1" id="save-access-btn">{{ trans('label.save') }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $('#save-access-btn').on('click', function(){
+        var name = $.trim($('#name').val());
+        if(typeof name == 'undefined' || name == false){
+            tips_message('{{ trans('label.name') }}');
+            return false;
+        }
+
+        $('#save-archive-form').submit();
+    });
+</script>

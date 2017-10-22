@@ -1,0 +1,19 @@
+{
+  "name": "8bitbase",
+  "version": "1.0.0",
+  "description": "PhalconRealtor\r =================\r ### Introduce\r PhalconRealtor is project realtor portal built on Phalcon PHP Framework",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "axios": "^0.16.2",
+    "bootstrap-sass": "^3.3.7",
+    "cross-env": "^5.0.1",
+    "jquery": "^3.1.1",
+    "laravel-mix": "^1.0",
+    "lodash": "^4.17.4",
+    "vue": "^2.1.10"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

@@ -1,0 +1,241 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('articles/index') }}">{{ trans('article-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('articles/index') }}">{{ trans('article-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {% if article is not empty %}
+                    {{ trans('label.edit') }}
+                {% else %}
+                    {{ trans('label.add') }}
+                {% endif %}
+            </small>
+        </h1>
+    </div>
+    <form action="{{url('articles/publish')}}" method="post" class="form-horizontal" id="save-archive-form" enctype="multipart/form-data">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label for="archive-title" class="col-sm-2 control-label">{{ trans('label.title') }}</label>
+                <div class="col-sm-9 input-group">
+                    <input maxlength="150" type="text" name="title" class="form-control" id="title" {% if article is not empty %}value="{{article['title']}}"{% endif %}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="slug" class="col-sm-2 control-label">{{ trans('label.slug') }}</label>
+                <div class="col-sm-9 input-group">
+                    <input type="text" name="slug" class="form-control" id="slug" {% if article is not empty %}value="{{article['slug']}}"{% endif %}>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="introduce" class="col-sm-2 control-label">{{ trans('label.introduce') }}</label>
+                <div class="col-sm-9 input-group">
+                    <textarea id="introduce" name="introduce" class="autosize-transition form-control" maxlength="100">{% if article is not empty %}{{article['introduce']}}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-category" class="col-sm-2 control-label">{{ trans('label.category') }}</label>
+                <div class="col-sm-4 input-group">
+                    <div class="archive-category-list">
+                        <ul>
+                            {% for value in categoryList %}
+                            <li>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="category[]" value="{{value['id']}}"
+                                        {% if article['categories'] is not empty %}
+                                           {% for cv in article['categories'] %}
+                                                {% if cv['id'] == value['id'] %}
+                                                    checked="checked"
+                                                    {% break %}
+                                                {% endif %}
+                                           {% endfor %}
+                                        {% endif %}
+                                    />{{value['name']}}
+                                    </label>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-tags" class="col-sm-2 control-label">{{ trans('label.tag') }}</label>
+                <div class="col-sm-9 input-group">
+                    <input type="text" name="tags" class="form-control" id="archive-tags" placeholder="{{ trans('label.tag') }}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="introduce" class="col-sm-2 control-label">{{ trans('label.image') }}</label>
+                <div class="col-sm-9 has-success">
+                    <input id="image" name="image" type="file" />
+                    <div class="help-block col-xs-12 col-sm-reset">
+                        File size max: 2MB, Size: 900x540 (px)
+                    </div>
+                </div>
+            </div>
+            {% if article['image'] is not empty %}
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-2">
+                    <span class="profile-picture">
+                        <img class="editable img-responsive editable-click editable-empty" src="{{article['image']}}" />
+                    </span>
+                </div>
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="content" class="col-sm-2 control-label">{{ trans('label.content') }}</label>
+                <div class="col-sm-9 full-tinymce input-group">
+                    <textarea id="content" class="tinymce autosize-transition form-control" name="content">{% if article is not empty %}{{article['content']}}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="status" class="col-sm-2 control-label">{{ trans('label.status') }}</label>
+                <div class="controls col-xs-12 col-sm-4 input-group">
+                    <select class="form-control" name="status" id="status">
+                        <option value="0" {% if article['status'] is not empty and article['status'] == '0' %}selected="selected"{% endif %}>{{ trans('label.disable') }}</option>
+                        <option value="1" {% if article['status'] is not empty and article['status'] == '1' %}selected="selected"{% endif %}>{{ trans('label.public') }}</option>
+                        <option value="-1" {% if article['status'] is not empty and article['status'] == '-1' %}selected="selected"{% endif %}>{{ trans('label.private') }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.is_top') }}</label>
+                <div class="controls col-xs-12 col-sm-9 input-group">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <label>
+                                <input name="is_top" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if article is not empty and article['is_top'] == 1 %}checked="checked"{% endif %} />
+                                <span class="lbl"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.is_recommend') }}</label>
+                <div class="controls col-xs-12 col-sm-9 input-group">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <label>
+                                <input name="is_top" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if article is not empty and article['is_recommend'] == 1 %}checked="checked"{% endif %} />
+                                <span class="lbl"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="archive-time" class="col-sm-2 control-label">{{ trans('label.created') }}</label>
+                <div class="col-sm-4 input-group">
+                    <input type="text" name="create_time" id="archive-time" class="form-control" {% if article is not empty %}value="{{article['create_time']}}"{% endif %} />
+                    <span class="input-group-addon">
+						<i class="fa fa-clock-o bigger-110"></i>
+					</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="col-sm-2 control-label">{{ trans('label.phone') }}</label>
+                <div class="col-sm-4 input-group">
+                    <input type="text" name="phone" id="phone" class="form-control" {% if article is not empty %}value="{{article['phone']}}"{% endif %} />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-5">
+                    {% if article is not empty and copy == 0 %}
+                        <input type="hidden" name="id" value="{{article['id']}}" />
+                    {% endif %}
+                    <button type="button" class="btn btn-info btn-sm" data-status="1" id="save-articles-btn">{{ trans('label.save') }}</button>
+                    <button type="button" class="btn btn-sm" data-status="0" id="save-articles-draft-btn">{{ trans('label.save-draft') }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<link rel="stylesheet" href="{{ static_url('tagsinput/jquery.tagsinput.css?_v=')~assetsVersion }}" />
+<link rel="stylesheet" href="{{ static_url('assets/css/bootstrap-datetimepicker.min.css?_v=')~assetsVersion }}" />
+<script src="{{ static_url('tagsinput/jquery.tagsinput.js?_v=')~assetsVersion }}"></script>
+<script src="{{ static_url('assets/js/moment.min.js?_v=')~assetsVersion }}"></script>
+<script src="{{ static_url('assets/js/bootstrap-datetimepicker.min.js?_v=')~assetsVersion }}"></script>
+<script>
+    // $('#archive-time').on('click', function(){
+    //     WdatePicker({
+    //         dateFmt:'yyyy-MM-dd HH:mm'
+    //     });
+    // });
+    
+    if(!ace.vars['old_ie']) $('#archive-time').datetimepicker({
+	 format: 'YYYY/MM/DD HH:mm:ss',//use this option to display seconds
+	 icons: {
+		time: 'fa fa-clock-o',
+		date: 'fa fa-calendar',
+		up: 'fa fa-chevron-up',
+		down: 'fa fa-chevron-down',
+		previous: 'fa fa-chevron-left',
+		next: 'fa fa-chevron-right',
+		today: 'fa fa-arrows ',
+		clear: 'fa fa-trash',
+		close: 'fa fa-times'
+	 }
+	}).next().on(ace.click_event, function(){
+		$(this).prev().focus();
+	});
+	
+    $('#archive-tags').tagsInput({
+        'defaultText':'',
+        'width':'100%',
+        'height':'auto'
+    });
+    $('#save-articles-btn, #save-articles-draft-btn').on('click', function(){
+        var title = $.trim($('#title').val());
+        if(typeof title == 'undefined' || title == false){
+            tips_message('{{ trans('label.title') }}');
+            return false;
+        }
+        
+        var slug = $.trim($('#slug').val());
+        var categorySlugPattern = /^[\w-]+$/i;
+        if(!categorySlugPattern.test(slug)){
+            tips_message("Slug {{ trans('validate.alpha_numeric_dash') }}");
+            return false;
+        }
+
+        var category = new Array();
+        $('input[name="category[]"]').each(function(){
+            if($(this).is(':checked')){
+                category.push($(this).val());
+            }
+        });
+        if(category.length == 0){
+            tips_message('{{ trans('alert.select-category') }}');
+            return false;
+        }
+
+        var tags = $.trim($('#archive-tags').val());
+        if(typeof tags == 'undefined' || tags == false){
+            tips_message('{{ trans('label.tag') }}');
+            return false;
+        }
+
+        var status = $(this).attr('data-status');
+        $('#status').val(status);
+
+        $('#save-archive-form').submit();
+    });
+    {% if article['tags'] is not empty %}
+        {% for tv in article['tags'] %}
+            $("#archive-tags").addTag("{{tv['name']}}");
+        {% endfor %}
+    {% endif %}
+</script>

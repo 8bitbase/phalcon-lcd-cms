@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    {{ partial('partials/header') }}
+</head>
+<body class="no-skin">
+    <div class="navbar navbar-default ace-save-state" id="navbar">
+        {{ partial('partials/top_sidebar') }}
+    </div>
+    <div class="main-container ace-save-state" id="main-container">
+        <script type="text/javascript">
+			try{ace.settings.loadState('main-container')}catch(e){}
+		</script>
+        <!--<div class="main-container-inner">-->
+            <!--<a class="menu-toggler" id="menu-toggler" href="javascript:void(0);">-->
+            <!--    <span class="menu-text"></span>-->
+            <!--</a>-->
+            <div class="sidebar responsive ace-save-state" id="sidebar">
+                <script type="text/javascript">
+					try{ace.settings.loadState('sidebar')}catch(e){}
+				</script>
+                {{ partial('partials/left_sidebar') }}
+            </div>
+            <div class="main-content">
+                {{content()}}
+            </div>
+        <!--</div>-->
+    </div>
+    {{ partial('partials/alert') }}
+    {{ partial('partials/footer') }}
+</body>
+</html>
+

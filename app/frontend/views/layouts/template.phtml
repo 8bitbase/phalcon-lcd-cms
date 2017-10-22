@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+    {{ partial('partials/head') }}
+    {{ partial('partials/css') }}
+    <body>
+        <!--Start header -->
+        {{ partial('partials/navigate') }}
+        <!--End header -->
+        <!--Start main-content -->
+        {{ content() }}
+        <!--End main-content -->
+        <!--Start footer -->
+        {{ partial('partials/foot') }}
+        <!--End footer -->
+        {{ partial('partials/js') }}
+    </body>
+</html>
