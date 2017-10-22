@@ -31,7 +31,7 @@ class AuthController extends PhalBaseController
             'title'         => $this->systemConfig->app->app_name,
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
         ));
-        $this->view->setMainView('auth/login');
+        $this->view->setMainView('layouts/login');
     }
 
     /**
