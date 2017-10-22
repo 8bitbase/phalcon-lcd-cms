@@ -1,0 +1,8 @@
+1,"Trang chủ",Home,1,1,"2017-08-27 15:32:07"
+259,"Mục tin",CategoryNews,1,NULL,"2017-08-27 16:01:33"
+261,"Bài viết",Article,1,NULL,"2017-08-27 15:32:16"
+262,"Mục con",CategoryChild,1,NULL,"2017-08-27 16:01:30"
+263,"Mục hình",CategoryImage,1,NULL,"2017-08-27 16:01:37"
+264,"Mục video",CategoryVideo,1,NULL,"2017-08-27 16:01:41"
+266,"Bài viết video",ArticleVideo,1,NULL,"2017-08-27 15:32:44"
+267,"Tag video",TagVideo,1,NULL,"2017-08-27 15:32:55"

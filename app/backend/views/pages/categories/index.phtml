@@ -1,0 +1,147 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('categories/index') }}">{{ trans('category-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('categories/index') }}">{{ trans('category-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('category-list') }}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <div class="btn-panel">
+            <a href="{{ url('categories/write') }}" class="btn btn-success btn-sm" role="button">{{ trans('label.add') }}</a>
+            <a href="{{ url('categories/refresh') }}" class="btn btn-pink btn-sm" role="button">{{ trans('label.clear-cache') }}</a>
+        </div>
+        <div class="table-responsive">
+                <table class="table tree-grid table-condensed table-hover" id="category-table">
+                    <thead>
+                        <tr>
+                            <th>{{ trans('label.name') }}</th>
+                            <th>{{ trans('label.id') }}</th>
+                            <th>{{ trans('label.slug') }}</th>
+                            <th>{{ trans('label.sort') }}</th>
+                            <th>{{ trans('label.status') }}</th>
+                            <th>{{ trans('label.updated') }}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    {% if categoryList is not empty %}
+                        <tbody>
+                            {% for index, category in categoryList %}
+                                {% if category['parent'] is not empty %}
+                                    <tr class="treegrid-{{category['id']}} treegrid-parent-{{category['parent']}}">
+                                {% else %}
+                                    <tr class="treegrid-{{category['id']}}">
+                                {% endif %}
+                                    <td>
+                                        <a href="{{ url('categories/write?id='~category['id']) }}" title="{{ trans('label.edit') }}">
+                                            {{ category['name'] }}
+                                        </a>
+                                    </td>
+                                    <td>{{ category['id'] }}</td>
+                                    <td>{{ category['slug'] }}</td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="category-sort-block" data-name="sort"
+                                           data-url="{{ url('categories/savesort') }}"
+                                           data-pk="{{category['id']}}" data-type="text"
+                                           data-placement="top" data-title="{{ trans('label.sort') }}">
+                                            {{ category['sort'] }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if category['status'] == 0 %}
+                                            <span class="label label-white middle">
+                                                <s>{{ trans('label.inactive') }}</s>
+                                            </span>
+                                        {% else %}
+                                            <span class="label label-success label-white middle">
+                                                {{ trans('label.active') }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ category['modify_time'] }}</td>
+                                    <td>
+                                        <a class="btn btn-xs btn-success" href="{{ url('categories/write?parent='~category['id']) }}">
+                                            <i class="fa fa-plus bigger-120"></i>
+                                        </a>
+                                        <a class="btn btn-xs btn-info" href="{{ url('categories/write?id='~category['id']) }}">
+                                            <i class="fa fa-pencil bigger-120"></i>
+                                        </a>
+                                        {% if category['id'] > 19 %}
+                                        <button class="btn btn-xs btn-danger delete-category" data-url="{{ url('categories/delete?id='~category['id']) }}">
+                                            <i class="fa fa-trash-o bigger-120"></i>
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                            <tr>
+                                <td colspan="8">{{ trans('label.no-data') }}</td>
+                            </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+        </div>
+    </div>
+</div>
+
+<link href="{{ static_url('bootstrap-editable/css/bootstrap-editable.css?_v=')~assetsVersion }}" rel="stylesheet"/>
+<script src="{{ static_url('bootstrap-editable/js/bootstrap-editable.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.tree-grid').treegrid();
+    });
+
+    $.fn.editable.defaults.mode = 'popup';
+    $('.category-sort-block').editable({
+        params:function(params){
+            params.sort = params.value;
+            params.id = params.pk;
+            if(params.sort <= 0 || params.sort > 999){
+                params.sort = 999;
+            }
+            return params;
+        },
+        success:function(response, value){
+            if (typeof response !== 'object') response = JSON.parse(response);
+            if(response.code == 1){
+                tips_message(response.message, 'success');
+            }else{
+                tips_message(response.message, 'error');
+            }
+            return true;
+        },
+        error:function(response){
+            tips_message('{{ trans('alert.error-network') }}');
+        },
+        display:function(value){
+            if(value <= 0 || value > 999){
+                value = 999;
+            }
+            $(this).html(value);
+        }
+    });
+
+    $('.delete-category').on('click', function(){
+        var dataUrl = $.trim($(this).attr('data-url'));
+        if(!window.confirm('{{ trans('alert.is-delete-selected') }}')){
+            return false;
+        }
+        window.location.href = dataUrl;
+    });
+</script>

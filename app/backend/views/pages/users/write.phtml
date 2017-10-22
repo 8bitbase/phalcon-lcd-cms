@@ -1,0 +1,170 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('users/users') }}">{{ trans('label.users') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('categorys/index') }}">{{ trans('label.users') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('info-change') }}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#users" data-toggle="tab">{{ trans('label.users') }}</a>
+            </li>
+            <li>
+                <a href="#password" data-toggle="tab">{{ trans('label.change-password') }}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="users">
+                <form action="{{url('users/publish')}}" method="post" class="form-horizontal" id="save-users-form">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">{{ trans('label.username') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" {% if users.username is not empty %}value="{{users.username}}" readonly="" {% endif %} class="form-control" id="username" name="username">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="realname" class="col-sm-2 control-label">{{ trans('label.realname') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="realname" value="{% if users.realname is not empty %}{{users.realname}}{% endif %}" class="form-control" id="realname" autocomplete="off">
+                            <span class="form-tips">{{ trans('label.realname') }} {{ trans('label.alpha_numeric_dash') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="phone" class="col-sm-2 control-label">{{ trans('label.phone') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="phone" value="{% if users.phone is not empty %}{{users.phone}}{% endif %}"
+                                   class="form-control" id="phone" autocomplete="off">
+                            <span class="form-tips">{{ trans('message.phone') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email" class="col-sm-2 control-label">{{ trans('label.email') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="email" value="{% if users.email is not empty %}{{users.email}}{% endif %}"
+                                   class="form-control" id="user-email" placeholder="{{ trans('email') }}" autocomplete="off" />
+                            <span class="form-tips">{{ trans('message.email') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.status') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input name="status" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if users.status is not empty and users.status == 1 %}checked="checked"{% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.profile') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <select class="form-control" id="id_profile" name="id_profile">
+                                        {% if profile is not empty %}
+                                            {% for profile in profile %}
+                                                <option value="{{profile['id']}}" {% if users.id_profile is not empty and profile.id == users.id_profile %} selected {% endif %}>{{profile['name']}}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <input type="hidden" {% if users.uid is not empty %} value="{{users.uid}}" {% endif %} class="form-control" name="usersID" id="usersID">
+                            <button type="submit" id="save-users-btn" class="btn btn-info btn-sm">{{ trans('save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="password">
+                {% if users.uid is not empty %}
+                <form action="{{url('users/savepwd')}}" method="post" class="form-horizontal" id="save-password-form">
+                    <div class="form-group">
+                        <label for="new-password" class="col-sm-2 control-label">{{ trans('new-passwd') }}</label>
+                        <div class="col-sm-5">
+                            <input type="password" name="newpwd" class="form-control" id="new-password" placeholder="{{ trans('new-passwd') }}" autocomplete="off" />
+                            <span class="form-tips">{{ trans('label.suggest-length') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password" class="col-sm-2 control-label">{{ trans('confirm-passwd') }}</label>
+                        <div class="col-sm-5">
+                            <input type="password" name="confirmpwd" class="form-control" id="confirm-password" placeholder="{{ trans('confirm-passwd') }}" autocomplete="off" />
+                            <span class="form-tips">{{ trans('label.suggest-correct-pw') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <input type="hidden" {% if users.uid is not empty %} value="{{users.username}}" {% endif %} class="form-control" name="username" id="username">
+                            <button type="submit" id="save-password-btn" class="btn btn-info btn-sm">{{ trans('change-password') }}</button>
+                        </div>
+                    </div>
+                </form>
+                {% else %}
+                    {{ trans('message.require-account') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#save-password-btn').on('click', function(){
+
+        var newpwd = $.trim($('#new-password').val());
+        if(newpwd == '' || newpwd == false){
+            tips_message('{{ trans('validate') }}');
+            return false;
+        }
+        if(newpwd.length < 6 || newpwd.length > 20){
+            tips_message('{{ trans('label.suggest-length') }}');
+            return false;
+        }
+
+        var confirmpwd = $.trim($('#confirm-password').val());
+        if(newpwd != confirmpwd){
+            tips_message('{{ trans('validate.confirm_passwd') }}');
+            return false;
+        }
+
+        $('#save-password-form').submit();
+    });
+
+    $('#save-users-btn').on('click', function(){
+        var username = $.trim($('#username').val());
+        var usernamePattern = /^[\u4e00-\u9fa5\w-]{2,20}$/i;
+        if(!usernamePattern.test(username)){
+            tips_message('{{ trans('validate.username') }}');
+            return false;
+        }
+
+        var email = $.trim($('#user-email').val());
+        var emailPattern = /^[_a-z0-9-\.]+@([-a-z0-9]+\.)+[a-z]{2,}$/i;
+        if(!emailPattern.test(email)){
+            tips_message('{{ trans('validate.correct') }}');
+            return false;
+        }
+
+        $('#save-users-form').submit();
+    });
+</script>

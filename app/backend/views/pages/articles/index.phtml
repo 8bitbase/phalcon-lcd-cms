@@ -1,0 +1,225 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('articles/index') }}">{{ trans('article-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('articles/index') }}">{{ trans('article-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('article-list') }}
+            </small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <select name="id_category" class="form-control">
+                            <option>{{ trans('label.please-select') }}</option>
+                            {% for value in categoryList %}
+                                {% if id_category is not empty and id_category == value['id'] %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% else %}
+                                    <option value="{{value['id']}}">
+                                {% endif %}
+                                {% if value['parent'] > 0 %}
+                                    {{ str_repeat('-', substr_count(value['path'], '/')) }}
+                                    {{value['name']}}
+                                {% else %}
+                                    {{value['name']}}
+                                {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" placeholder="{{ trans('label.keyword') }}" {% if keyword is not empty %}value="{{keyword}}"{% endif %} />
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    {{ trans('label.search') }}
+                                    <i class="icon-search icon-on-right bigger-110"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="btn-panel">
+                            <a href="{{ url('articles/write') }}" class="btn btn-success btn-sm" role="button">{{ trans('label.add') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table tree-grid table-striped table-bordered table-condensed table-hover" id="tblData">
+                    <thead>
+                        <tr>
+                            <th class="no-sort">{{ trans('label.id') }}</th>
+                            <th class="no-sort" width="20%">{{ trans('label.title') }}</th>
+                            <th class="no-sort" width="10%">{{ trans('label.category') }}</th>
+                            <th class="no-sort">{{ trans('label.status') }}</th>
+                            <th>{{ trans('label.created') }}</th>
+                            <th>{{ trans('label.updated') }}</th>
+                            <th>{{ trans('label.read') }}</th>
+                            <th>{{ trans('label.author') }}</th>
+                            <th class="no-sort" width="15%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    {% if articles is not empty %}
+                        <tbody>
+                            {% for article in articles %}
+                                <tr>
+                                    <td>
+                                        {{article['id']}}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url('articles/write?id='~article['id']) }}" title="{{ trans('label.edit') }}">
+                                            {{article['title']}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% for ck, cv in article['categories'] %}
+                                            {% if ck == 0 %}
+                                                <a href="{{ url('articles/index?id_category='~cv['id']) }}" title="{{ trans('label.view') }}">
+                                                    {{cv['name']}}
+                                                </a>
+                                            {% else %}
+                                                ,<a href="{{ url('articles/index?id_category='~cv['id']) }}" title="{{ trans('label.view') }}">
+                                                    {{cv['name']}}
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if article['status'] == 1 %}
+                                            {{ trans('label.public') }}
+                                        {% elseif article['status'] == -1 %}
+                                            {{ trans('label.private') }}
+                                        {% else %}
+                                            {{ trans('label.disable') }}
+                                        {% endif %}
+                                    </td>
+                                    <td data-order="<?php echo strtotime($article['create_time']); ?>">{{article['create_time']}}</td>
+                                     <td data-order="<?php echo strtotime($article['modify_time']); ?>">{{article['modify_time']}}</td>
+                                    <td>{{article['view_number']}}</td>
+                                    <td>{{userinfo['realname']}}</td>
+                                    <td>
+                                        <a class="btn btn-xs btn-info" href="/tin/{{article['slug']}}-{{article['id']}}.html/review" title="{{ trans('label.view') }}" target="_blank">
+                                            <i class="fa fa-eye bigger-120"></i>
+                                        </a>
+                                        <a class="btn btn-xs btn-info" href="{{ url('articles/write?id='~article['id']) }}" title="{{ trans('label.edit') }}">
+                                            <i class="fa fa-pencil bigger-120"></i>
+                                        </a>
+                                        {% if article['is_top'] == 1 %}
+                                            <a class="btn btn-xs btn-success" href="{{ url('articles/top?type=0&id='~article['id']) }}" title="{{ trans('label.unpin-top') }}">
+                                                <i class="fa fa-star"></i>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn btn-xs btn-success" href="{{ url('articles/top?type=1&id='~article['id']) }}" title="{{ trans('label.pin-top') }}">
+                                                <i class="fa fa-star-o"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if article['is_recommend'] == 1 %}
+                                            <a class="btn btn-xs btn-primary" href="{{ url('articles/recommend?type=0&id='~article['id']) }}" title="{{ trans('label.unpin-recommend') }}">
+                                                <i class="fa fa-heart"></i>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn btn-xs btn-primary" href="{{ url('articles/recommend?type=1&id='~article['id']) }}" title="{{ trans('label.pin-recommend') }}">
+                                                <i class="fa fa-heart-o"></i>
+                                            </a>
+                                        {% endif %}
+                                        <button class="btn btn-xs btn-danger delete-articles" data-url="{{ url('articles/delete?id='~article['id']) }}" title="{{ trans('label.delete') }}">
+                                            <i class="fa fa-trash-o bigger-120"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                        <tr>
+                            <td colspan="7">{{ trans('label.no-data') }}</td>
+                        </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>-->
+<script type="text/javascript" src="{{ static_url('assets/js/jquery.dataTables.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('assets/js/jquery.dataTables.bootstrap.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('assets/js/dataTables.buttons.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('assets/js/buttons.flash.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('assets/js/buttons.html5.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('assets/js/buttons.print.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('assets/js/buttons.colVis.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('assets/js/dataTables.select.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" type="text/javascript">
+    $(document).ready(function() {
+        $('#tblData').DataTable({
+            "order": [[ 4, "desc" ]],
+            "iDisplayLength": 50,
+            "bLengthChange": false,
+            "columnDefs": [{
+                "targets": 'no-sort',
+                "orderable": false,
+            }],
+            "language": {
+                "sProcessing":   "Đang xử lý...",
+                "sLengthMenu":   "Xem _MENU_ mục",
+                "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+                "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+                "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                "sInfoPostFix":  "",
+                "sSearch":       "Tìm:",
+                "sUrl":          "",
+                "oPaginate": {
+                    "sFirst":    "Đầu",
+                    "sPrevious": "Trước",
+                    "sNext":     "Tiếp",
+                    "sLast":     "Cuối"
+                }
+            }
+        });
+    } );
+
+    $('.delete-articles').on('click', function(){
+        var dataUrl = $.trim($(this).attr('data-url'));
+        if(!window.confirm("{{ trans('alert.is-delete-selected') }}")){
+            return false;
+        }
+        window.location.href = dataUrl;
+    });
+        
+    tinymce.init({
+        selector: "textarea.tinymce",theme: "modern",width: 680,height: 300,
+        plugins: [
+             "advlist autolink link image lists charmap print preview hr anchor pagebreak",
+             "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+             "template table contextmenu directionality emoticons paste textcolor responsivefilemanager code"
+        ],
+        toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+        toolbar2: "template | forms | responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
+        image_advtab: true ,
+        
+        external_filemanager_path:"/backend/filemanager/",
+        filemanager_title:"LCD Filemanager" ,
+        external_plugins: { "filemanager" : "/backend/filemanager/plugin.min.js"},
+        templates: [
+            {title: 'Mẫu trang sale', description: 'Mẫu nhập liệu cơ bản', url: '{{ static_url("tinymce/template/_salepage.html?v=")~assetsVersion }}'}
+        ]
+    });
+</script>

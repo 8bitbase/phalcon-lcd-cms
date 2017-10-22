@@ -1,0 +1,104 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('options/api') }}">{{ trans('api-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('options/api') }}">{{ trans('api-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {% if options is not empty %}
+                    {{ trans('label.edit') }}
+                {% else %}
+                    {{ trans('label.add') }}
+                {% endif %}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#apiinfo" data-toggle="tab">{{ trans('label.google-config') }}</a>
+            </li>
+            <!-- <li>
+                <a href="#acceinfo" data-toggle="tab">{{ trans('label.access') }}</a>
+            </li> -->
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="apiinfo">
+                <form action="{{url('options/saveapi')}}" method="post" class="form-horizontal" id="api-form">
+                    <div class="form-group">
+                        <label for="Google_Client_ID" class="col-sm-2 control-label">{{ trans('label.Google_Client_ID') }}</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="Google_Client_ID" class="form-control" id="Google_Client_ID" {% if options is not empty %}value="{{options['Google_Client_ID']['op_value']}}"{% endif %}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Google_Client_Secret" class="col-sm-2 control-label">{{ trans('label.Google_Client_Secret') }}</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="Google_Client_Secret" class="form-control" id="Google_Client_Secret" {% if options is not empty %}value="{{options['Google_Client_Secret']['op_value']}}"{% endif %}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.Google_API_Enable') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input name="Google_API_Enable" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if options is not empty and options['Google_API_Enable']['op_value'] == 1 %}checked="checked"{% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.Google_Map') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                        <input name="Google_Map" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if options is not empty and options['Google_Map']['op_value'] == 1 %}checked="checked"{% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.Google_Login') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input name="Google_Login" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if options is not empty and options['Google_Login']['op_value'] == 1 %}checked="checked"{% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <button type="button" class="btn btn-info btn-sm" data-status="1" id="save-api-btn">{{ trans('label.save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="accessinfo"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#save-api-btn').on('click', function(){
+        $('#api-form').submit();
+    });
+</script>

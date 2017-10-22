@@ -1,0 +1,82 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="javascript:void(0);">{{ trans('mail-setting') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            {{ trans('mail-setting') }}
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('mail-setting') }}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <form action="{{url('options/savemail')}}" method="post" class="form-horizontal" id="base-options-form">
+            <div class="form-group">
+                <label for="mail_server" class="col-sm-2 control-label">{{ trans('label.mail_server') }}</label>
+                <div class="col-sm-8">
+                    <input type="text" name="mail_server" value="{% if options is not empty %}{{options['mail_server']['op_value']}}{% endif %}"
+                           class="form-control" id="mail_server" placeholder="{{ trans('label.mail_server') }}">
+                    <span class="form-tips">{{ trans('message.mail_server') }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="mail_user" class="col-sm-2 control-label">{{ trans('label.mail_user') }}</label>
+                <div class="col-sm-8">
+                    <input type="text" name="mail_user" value="{% if options is not empty %}{{options['mail_user']['op_value']}}{% endif %}"
+                           class="form-control" id="mail_user" placeholder="{{ trans('label.mail_user') }}">
+                    <span class="form-tips">{{ trans('message.mail_user') }}</span>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="mail_passwd" class="col-sm-2 control-label">{{ trans('label.mail_passwd') }}</label>
+                <div class="col-sm-8">
+                    <input type="text" name="mail_passwd" value="{% if options is not empty %}{{options['mail_passwd']['op_value']}}{% endif %}"
+                           class="form-control" id="mail_passwd" placeholder="http://">
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="mail_smtp_encryption" class="col-sm-2 control-label">{{ trans('label.mail_smtp_encryption') }}</label>
+                <div class="col-sm-8">
+                    <input type="text" name="mail_smtp_encryption" value="{% if options is not empty %}{{options['mail_smtp_encryption']['op_value']}}{% endif %}"
+                           class="form-control" id="mail_smtp_encryption" placeholder="http://">
+                    <span class="form-tips">{{ trans('message.mail_smtp_encryption') }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="mail_smtp_port" class="col-sm-2 control-label">{{ trans('label.mail_smtp_port') }}</label>
+                <div class="col-sm-8">
+                    <input type="text" name="mail_smtp_port" value="{% if options is not empty %}{{options['mail_smtp_port']['op_value']}}{% endif %}"
+                           class="form-control" id="mail_smtp_port" placeholder="{{ trans('label.mail_smtp_port') }}" />
+                    <span class="form-tips">{{ trans('message.mail_smtp_port') }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-5">
+                    <button type="submit" id="base-options-btn" class="btn btn-info btn-sm">{{ trans('label.save') }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#base-options-btn').on('click', function(){
+        // var mailName = $.trim($('#mail-name').val());
+        // var mailNamePattern = /^[\u4e00-\u9fa5\w-]+$/i;
+        // if(!mailNamePattern.test(mailName)){
+        //     tips_message("{{ trans('label.mail_server') }} {{ trans('label.alpha_numeric_dash') }}");
+        //     return false;
+        // }
+
+        $('#base-options-form').submit();
+    });
+</script>

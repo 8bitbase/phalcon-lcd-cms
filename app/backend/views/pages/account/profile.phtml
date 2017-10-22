@@ -1,0 +1,151 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('account/profile') }}">{{ trans('profile') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('categorys/index') }}">{{ trans('profile') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {{ trans('info-change') }}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#profile" data-toggle="tab">{{ trans('profile') }}</a>
+            </li>
+            <li>
+                <a href="#password" data-toggle="tab">{{ trans('change-password') }}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="profile">
+                <form action="{{url('account/saveprofile')}}" method="post" class="form-horizontal" id="save-profile-form">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">{{ trans('username') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" {% if user.username is not empty %}value="{{user.username}}" disabled {% endif %}
+                                   class="form-control" id="username">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="realname" class="col-sm-2 control-label">{{ trans('realname') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="realname" value="{% if user is not empty %}{{user.realname}}{% endif %}"
+                                   class="form-control" id="realname" autocomplete="off">
+                            <span class="form-tips">{{ trans('realname') }} {{ trans('label.alpha_numeric_dash') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="phone" class="col-sm-2 control-label">{{ trans('phone') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="phone" value="{% if user is not empty %}{{user.phone}}{% endif %}"
+                                   class="form-control" id="phone" autocomplete="off">
+                            <span class="form-tips">{{ trans('message.phone') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email" class="col-sm-2 control-label">{{ trans('email') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="email" value="{% if user is not empty %}{{user.email}}{% endif %}"
+                                   class="form-control" id="user-email" placeholder="{{ trans('email') }}" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <button type="submit" id="save-profile-btn" class="btn btn-info btn-sm">{{ trans('save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="password">
+                <form action="{{url('account/savepwd')}}" method="post" class="form-horizontal" id="save-password-form">
+                    <div class="form-group ">
+                        <label for="old-password" class="col-sm-2 control-label">{{ trans('old-passwd') }}</label>
+                        <div class="col-sm-5">
+                            <input type="password" name="oldpwd" class="form-control" id="old-password" autocomplete="off" placeholder="{{ trans('old-passwd') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password" class="col-sm-2 control-label">{{ trans('new-passwd') }}</label>
+                        <div class="col-sm-5">
+                            <input type="password" name="newpwd" class="form-control" id="new-password" placeholder="{{ trans('new-passwd') }}" autocomplete="off" />
+                            <span class="form-tips">{{ trans('label.suggest-length') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password" class="col-sm-2 control-label">{{ trans('confirm-passwd') }}</label>
+                        <div class="col-sm-5">
+                            <input type="password" name="confirmpwd" class="form-control" id="confirm-password" placeholder="{{ trans('confirm-passwd') }}" autocomplete="off" />
+                            <span class="form-tips">{{ trans('label.suggest-correct-pw') }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <button type="submit" id="save-password-btn" class="btn btn-info btn-sm">{{ trans('change-password') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#save-password-btn').on('click', function(){
+        var oldpwd = $.trim($('#old-password').val());
+        if(oldpwd == '' || oldpwd == false){
+            tips_message('{{ trans('validate') }}');
+            return false;
+        }
+        if(oldpwd.length < 6 || oldpwd.length > 20){
+            tips_message('{{ trans('label.suggest-length') }}');
+            return false;
+        }
+
+        var newpwd = $.trim($('#new-password').val());
+        if(newpwd == '' || newpwd == false){
+            tips_message('{{ trans('validate') }}');
+            return false;
+        }
+        if(newpwd.length < 6 || newpwd.length > 20){
+            tips_message('{{ trans('label.suggest-length') }}');
+            return false;
+        }
+
+        var confirmpwd = $.trim($('#confirm-password').val());
+        if(newpwd != confirmpwd){
+            tips_message('{{ trans('validate.confirm_passwd') }}');
+            return false;
+        }
+
+        $('#save-password-form').submit();
+    });
+
+    $('#save-profile-btn').on('click', function(){
+        var realname = $.trim($('#realname').val());
+        var realnamePattern = /^[\u4e00-\u9fa5\w-]{2,20}$/i;
+        if(!realnamePattern.test(realname)){
+            tips_message('{{ trans('validate.username') }}');
+            return false;
+        }
+
+        var email = $.trim($('#user-email').val());
+        var emailPattern = /^[_a-z0-9-\.]+@([-a-z0-9]+\.)+[a-z]{2,}$/i;
+        if(!emailPattern.test(email)){
+            tips_message('{{ trans('validate.correct') }}');
+            return false;
+        }
+
+        $('#save-profile-form').submit();
+    });
+</script>

@@ -1,0 +1,157 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('profile/index') }}">{{ trans('profile-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('profile/index') }}">{{ trans('profile-management') }}</a>
+            <small>
+                <i class="fa fa-angle-double-right"></i>
+                {% if profile is not empty %}
+                    {{ trans('label.edit') }}
+                {% else %}
+                    {{ trans('label.add') }}
+                {% endif %}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#profileinfo" data-toggle="tab">{{ trans('label.profile') }}</a>
+            </li>
+            <li>
+                <a href="#accessinfo" data-toggle="tab">{{ trans('label.access') }}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="profileinfo">
+                <form action="{{url('profile/publish')}}" method="post" class="form-horizontal" id="save-archive-form">
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.name') }}</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="name" class="form-control" id="name" {% if profile is not empty %}value="{{profile['name']}}"{% endif %}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.status') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input name="status" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if profile is not empty and profile['status'] == 1 %}checked="checked"{% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            {% if profile is not empty %}
+                                <input type="hidden" name="profileID" value="{{profile['id']}}" />
+                            {% endif %}
+                            <button type="button" class="btn btn-info btn-sm" data-status="1" id="save-profile-btn">{{ trans('label.save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="accessinfo">
+                <form action="{{url('profile/access')}}" method="post" class="form-horizontal" id="save-access-form">
+                    <table class="table tree-grid table-striped table-bordered table-condensed table-hover" id="test-table">
+                        <thead>
+                            <tr>
+                                <th>{{ trans('label.module') }}</th>
+                                <th>{{ trans('label.view') }}</th>
+                                <th>{{ trans('label.add') }}</th>
+                                <th>{{ trans('label.edit') }}</th>
+                                <th>{{ trans('label.delete') }}</th>
+                            </tr>
+                        </thead>
+                        {% if modules is not empty %}
+                            <tbody>
+                                {% for module in modules %}
+                                    <tr>
+                                        <td>
+                                            {{module['display']}}
+                                        </td>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="module[{{module['id']}}][view]" type="checkbox" class="ace" value="1" {% if module['is_view'] is not empty and module['is_view'] == 1 %}checked{% endif %} />
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="module[{{module['id']}}][add]" type="checkbox" class="ace" value="1" {% if module['is_add'] is not empty and module['is_add'] == 1 %}checked{% endif %} />
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="module[{{module['id']}}][edit]" type="checkbox" class="ace" value="1" {% if module['is_edit'] is not empty and module['is_edit'] == 1 %}checked{% endif %} />
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="module[{{module['id']}}][delete]" type="checkbox" class="ace" value="1" {% if module['is_delete'] is not empty and module['is_delete'] == 1 %}checked{% endif %} />
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% else %}
+                            <tbody>
+                            <tr>
+                                <td colspan="5">{{ trans('label.no-data') }}</td>
+                            </tr>
+                            </tbody>
+                        {% endif %}
+                    </table>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            {% if profile is not empty %}
+                                <input type="hidden" name="profileID" value="{{profile['id']}}" />
+                            {% endif %}
+                            <button type="button" class="btn btn-info btn-sm" data-status="1" id="save-access-btn">{{ trans('label.save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#save-profile-btn').on('click', function(){
+        var name = $.trim($('#name').val());
+        if(typeof name == 'undefined' || name == false){
+            tips_message('{{ trans('label.name') }}');
+            return false;
+        }
+
+        $('#save-archive-form').submit();
+    });
+
+    $('#save-access-btn').on('click', function(){
+        $('#save-access-form').submit();
+    });
+</script>

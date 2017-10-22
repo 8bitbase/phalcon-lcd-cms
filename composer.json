@@ -1,0 +1,31 @@
+{
+    "name": "8bitbase/phalcon-cms",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "monolog/monolog": "1.0.*",
+        "php": ">=5.6",
+        "mobiledetect/mobiledetectlib": "*",
+        "friendsofphp/php-cs-fixer": "*",
+        "phpoffice/phpexcel": "^1.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "scripts": {
+        "post-install-cmd": [],
+        "post-update-cmd": []
+    },
+    "extra": {
+    }
+}
