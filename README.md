@@ -5,7 +5,8 @@ Lcd CMS is small project build on **Phalcon framework 3.2**. It's apply to **8-B
 Developer can use to develop powerful applications with low server consumption and high performance via Phalcon's architecture allows the framework to always be memory resident, offering its functionality whenever its needed, without expensive file stats and file reads that traditional PHP frameworks employ.<br/>
 * Author: lechidungvl@gmail.com<br/>
 * Blog: http://lcdung.top
-* Document: updating
+* Document: https://github.com/8bitbase/phalcon-lcd-cms/wiki
+* Demo: http://lcd-cms.8bitbase.com
 
 ### Basic features
 * Use HMVC, Repository Pattern
