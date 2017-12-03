@@ -13,7 +13,7 @@ return new \Phalcon\Config([
         'host'     => 'localhost',
         'port'     => 3306,
         'username' => 'root',
-        'password' => '',
+        'password' => 'froze1928',
         'dbname'   => 'lcd-cms',
         'charset'  => 'utf8',
     ]
