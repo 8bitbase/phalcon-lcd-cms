@@ -76,38 +76,6 @@ install:
           composer remove -q -n --no-ansi --no-progress --dev phpunit/phpunit
           composer require -q -n --no-ansi --no-progress --dev --prefer-source --no-suggest  phpunit/phpunit:^6.4
       fi
-  - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
-  - bash tests/_ci/install-re2c $RE2C_VERSION
-  - bash tests/_ci/install_zephir_parser.sh
-  - bash tests/_ci/install_zephir.sh
-  # We still need this until end of support of PHP 5.x
-  - |
-      if [ "${PHP_MAJOR}" = "7" ]; then
-          zephir generate --backend=ZendEngine3
-      else
-          zephir generate --backend=ZendEngine2
-      fi
-  # Use `-g -O0' for debug purposes
-  - export CFLAGS="-g3 -O1 -std=gnu90 -Wall"
-  - cd ${TRAVIS_BUILD_DIR}/ext
-  # Creating precompiled headers.
-  # If a `*.gch' file is not found then the normal header files will be used.
-  # For more see: http://en.wikipedia.org/wiki/Precompiled_header
-  - |
-      for file in `find kernel -name "*.h"`; do
-          echo -e "Creating a precompiled header: ext/${file} => ext/${file}.ghc ...";
-          $CC "$file" -I. $(php-config --includes) -o "$file.ghc";
-      done
-  # You may need to remove all `&> /dev/null' and `--silent' for debug purposes
-  - $(phpenv which phpize) &> /dev/null
-  - ./configure --silent --with-php-config=$(phpenv which php-config) --enable-phalcon &> /dev/null
-  - make --silent -j"$(getconf _NPROCESSORS_ONLN)" &> /dev/null
-  - make --silent install
-  - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/phalcon.ini
-  # We use this file as our custom PHP config
-  - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/ci.ini
-  # Some debug info is located here
-  - ls -al `$(phpenv which php-config) --extension-dir`
   - $(phpenv which php) -v
   - $(phpenv which php) -m
   - $(phpenv which php) --ri phalcon
